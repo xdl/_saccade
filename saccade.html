@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css" media="screen">
+      #experimentBody {
+        text-align: center;
+      }
+      .circle {
+        background-color: black;
+        display: inline-block;
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .red {
+        background-color: red;
+      }
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <div id='experimentBody'>
+      <div id='formContainer'>
+        <input id='identifierField' type='text' placeholder='id here'></input>
+        <button id='startButton'>Start</button>
+      </div>
+    </div>
+  </body>
+  <script charset="utf-8"> 
+    //getting the DOM nodes in the body
+    var experimentScreen = document.getElementById('experimentBody');
+    var startButton = document.getElementById('startButton');
+    var identifierField = document.getElementById('identifierField');
+    var formContainer = document.getElementById('formContainer');
+
+    //use this to store what they've inputted
+    var identifierValue;
+
+    function finish() {
+      var finishNode = document.createElement('div');
+      finishNode.innerHTML = 'wait 1300ms, loop for 10 mins, then show this screen.';
+      var finishButton = document.createElement('button');
+      finishButton.innerHTML = 'clicking this button will store the identifier "' + identifierValue + '" somewhere';
+      finishNode.appendChild(finishButton);
+      experimentScreen.appendChild(finishNode);
+    }
+
+    function showFood() {
+      var direction = Math.round(Math.random()) //0 for left, 1 for right
+      experimentScreen.appendChild(fruitNode);
+      if (direction === 0) {
+        fruitNode.className = 'left'
+      } else {
+        fruitNode.className = 'right'
+      }
+
+      setTimeout(function() {
+        experimentScreen.removeChild(fruitNode);
+        finish();
+      }, 500);
+    }
+
+    function showBlank() {
+      //Do nothing
+      setTimeout(function() {
+        showFood();
+      }, 200);
+    }
+
+    function showColouredDot() {
+      var colour = Math.round(Math.random()) //0 for blue, 1 for red
+      var dot;
+      if (colour === 0) {
+        experimentScreen.appendChild(blueDot);
+        dot = blueDot;
+      } else {
+        experimentScreen.appendChild(redDot);
+        dot = redDot;
+      }
+
+      setTimeout(function() {
+        experimentScreen.removeChild(dot);
+        showBlank();
+      }, 500);
+    }
+
+    function showBlackDot() {
+      experimentScreen.appendChild(blackDot);
+      setTimeout(function() {
+        experimentScreen.removeChild(blackDot);
+        showColouredDot();
+      }, 100);
+    }
+
+    function startExperiment() {
+      //store it for later
+      identifierValue = identifierField.value;
+      experimentScreen.removeChild(formContainer);
+      showBlackDot();
+    };
+    
+
+    //setting up the experiment and creating the other nodes that'll be needed
+    startButton.addEventListener('click', startExperiment);
+
+    var fruitNode = document.createElement('img');
+    fruitNode.src = 'https://www.uzuma.com/img/cms/Uzuma/Ingredients/Apple/EN/Apple1.jpg';
+    fruitNodewidth = 100;
+    fruitNode.height = 100;
+
+    var blackDot = document.createElement('div');
+    blackDot.classList.add('circle');
+    blackDot.classList.add('black');
+
+    var blueDot = document.createElement('div');
+    blueDot.classList.add('circle');
+    blueDot.classList.add('blue');
+
+    var redDot = document.createElement('div');
+    redDot.classList.add('circle');
+    redDot.classList.add('red');
+
+  </script>
+</html>
